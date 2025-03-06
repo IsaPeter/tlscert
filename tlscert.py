@@ -1,6 +1,7 @@
 import ssl
 import socket
 from argparse import ArgumentParser
+from datetime import datetime
 
 
 def parse_arguments():
@@ -72,7 +73,12 @@ def main():
         print("Not Before: ", certificate["notBefore"])
 
       if args.not_after:
-        print("Not After: ", certificate["notAfter"])
+        date_format = "%b %d %H:%M:%S %Y GMT"
+        date_string = certificate["notAfter"]
+        parsed_date = datetime.strptime(date_string, date_format)
+        now = datetime.now()
+
+        print("Not After: ", certificate["notAfter"], f"({(parsed_date-now).days} days left)")
 
 
       if args.dump:
